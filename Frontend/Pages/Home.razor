@@ -1,0 +1,39 @@
+﻿@page "/"
+@using Blogzor.Models
+@inject Services.BlogContext context
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@if (_articles != null)
+{
+    <p>Number of Articles: @_articles.Count</p>
+    @foreach (var article in _articles)
+    {
+        <p>ID: @article.Id; Title: @article.Title</p>
+    }
+}
+
+@code {
+
+    List<Article>? _articles;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var article = new Article
+        {
+            Title = "SampleArticle",
+            Content = "Markdown goes here",
+            Body = "HTML goes here"
+        };
+
+        context.Add(article);
+        await context.SaveChangesAsync();
+
+        _articles = context.Articles.ToList();
+    }
+
+}
